@@ -1,0 +1,217 @@
+$part-size: 16px;
+$size: $part-size * 3;
+$font-size: 11px;
+$height-cube-footer: $font-size + 1;
+$colors: (
+    "cube-back": #ED294E,
+    "cube-fore": rgba(255, 255, 255, .75),
+    "light": #fff,
+    "shadow": #000,
+    "bg-gradient": (#fefefe 0%, #f0f0f0 35%, #ddd 50%, #f0f0f0 65%, #fefefe 100%),
+    "footer-back": #333,
+    "footer-fore": #fafafa,
+);
+
+@mixin light($alpha) {
+    .c-cube__face__part {
+        background: rgba(map-get($colors, "light"), $alpha);
+    }
+}
+
+@mixin shadow($alpha) {
+    .c-cube__face__part {
+        background: rgba(map-get($colors, "shadow"), $alpha);
+    }
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.l-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(90deg, map-get($colors, "bg-gradient"));
+}
+
+.l-cube-container {
+    display: flex;
+    flex: 0 1;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    height: $size*(1+.3125*2);
+    width: $part-size*8.5;
+
+    .c-cube {
+        position: relative;
+        transform-style: preserve-3d;
+        width: $size;
+        height: $size;
+        transform: rotateX(-30deg) rotateY(-45deg);
+        margin: 0 round($part-size * .61);
+
+        &__face {
+            position: absolute;
+            display: flex;
+            flex-wrap: wrap;
+            width: $size;
+            height: $size;
+            background: map-get($colors, "cube-back");
+
+            &__part {
+                position: relative;
+                width: $part-size;
+                height: $part-size;
+
+                &--is-marked {
+                    &:before {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        content: '';
+                        background: map-get($colors, "cube-fore");
+                    }
+                }
+            }
+
+            &:nth-of-type(1) {
+                @include light(.1);
+                transform: rotateX(90deg) translateZ($size / 2);
+            }
+
+            &:nth-of-type(2) {
+                @include shadow(.0);
+                transform: rotateY(0deg) translateZ($size / 2);
+            }
+
+            &:nth-of-type(3) {
+                @include shadow(.1);
+                transform: rotateY(90deg) translateZ($size / 2);
+            }
+        }
+
+        &--face-bottom {
+            transform: rotateX(30deg) rotateY(-45deg);
+
+            .c-cube__face {
+                background: map-get($colors, "cube-back");
+
+                &:nth-of-type(1) {
+                    @include shadow(.15);
+                    transform: rotateX(-90deg) translateZ($size / 2);;
+                }
+
+                &:nth-of-type(2) {
+                    @include light(.1);
+                }
+
+                &:nth-of-type(3) {
+                    @include light(0);
+                }
+            }
+
+            .c-cube__footer {
+                &:nth-of-type(4) {
+                    transform: rotateY(90deg) translateZ($size / 2) translateX(-$size) translateY($part-size * 5.5 - 1);
+                    text-align: right;
+                    padding-right: 1px;
+                }
+    
+                &:nth-of-type(5) {
+                    transform: rotateY(0deg) translateZ($size / 2) translateX($size) translateY($part-size * 5.5 - 1);
+                    text-align: left;
+                }
+            }
+        }
+
+        &__footer {
+            position: absolute;
+            overflow: hidden;
+            width: $size;
+            height: $height-cube-footer;
+            font-family: monospace;
+            font-size: $font-size;
+            line-height: $font-size;
+            padding-bottom: 1px;
+            box-sizing: border-box;
+            background: map-get($colors, "footer-back");
+            color: map-get($colors, "footer-fore");
+            text-align: center;
+
+            &:nth-of-type(4) {
+                transform: rotateY(0deg) translateY($size) translateZ($size / 2);
+            }
+
+            &:nth-of-type(5) {
+                transform: rotateY(90deg) translateY($size) translateZ($size / 2);
+            }
+        }
+    }
+}
+
+.l-cube__footer-container {
+    position: absolute;
+    width: 100%;
+    height: $height-cube-footer;
+    transform-style: preserve-3d;
+
+    animation: roll 16s ease-in-out forwards infinite;
+
+    .c-cube__footer__part {
+        position: absolute;
+        width: 100%;
+        background: map-get($colors, "footer-back");
+        font-size: $font-size;
+        line-height: $font-size;
+        padding-bottom: 1px;
+        box-sizing: border-box;
+
+        &:nth-child(1) {
+            transform: rotateX(0deg) translateZ($height-cube-footer / 2);
+        }
+        &:nth-child(2) {
+            transform: rotateX(90deg) translateZ($height-cube-footer / 2);
+        }
+        &:nth-child(3) {
+            transform: rotateX(180deg) translateZ($height-cube-footer / 2);
+        }
+        &:nth-child(4) {
+            transform: rotateX(270deg) translateZ($height-cube-footer / 2);
+        }
+    }
+}
+
+@keyframes roll {
+    0% {
+        transform: rotateX(0deg);
+    }
+    20% {
+        transform: rotateX(0deg);
+    }
+    25% {
+        transform: rotateX(-90deg);
+    }
+    45% {
+        transform: rotateX(-90deg);
+    }
+    50% {
+        transform: rotateX(-180deg);
+    }
+    70% {
+        transform: rotateX(-180deg);
+    }
+    75% {
+        transform: rotateX(-270deg);
+    }
+    95% {
+        transform: rotateX(-270deg);
+    }
+    100% {
+        transform: rotateX(-360deg);
+    }
+}
